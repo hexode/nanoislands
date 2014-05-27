@@ -80,6 +80,17 @@
                         $content.toggleClass(TOGGLE_COMPACT, on);
                     });
 
+                $(document).on('keydown', function(event) {
+                    event = window.event ? window.event : event;
+                    if (event.keyCode === 38) {
+                      alert('Нажатие вверх');
+                    }
+                });
+
+                nb.block($('#popup-content').get(0)).on('nb-opened', function() {
+                    nb.block($('.nb-input-with-focus').get(0)).focus();
+                });
+
             });
         </script>
     </body>

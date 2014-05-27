@@ -37,6 +37,12 @@ func toggle-modal() {
         </span>
     </a>
     <br />
+    <a class="nb link link_wrapper link_pseudo" data-nb="popup-toggler" data-nb-popup-toggler="{{id: 'popup-content'}}" href="#modal-content">
+        <span class="link__inner">
+            "Модальный Попап с багом"
+        </span>
+    </a>
+    <br />
     <a class="nb link link_wrapper link_pseudo" data-nb="popup-toggler" data-nb-popup-toggler="{{id: 'popup5'}}" href="#modalBlank">
         <span class="link__inner">
             "Модальный Попап"
@@ -152,6 +158,104 @@ func popups() {
         ]}
      }
 
+    // Воспроизводится несколько багов:
+    // 1. при нажатии по табу фокус с инпута не переходит на следующий элемент
+    // 2. при нажатии по шифт-табу фокус с инпута переходит на элементы, но также переходит и на отключенный селект
+    // 3. Если открыть дроп-даун селекта - то при скролле увидим, что дропдаун меняет свое положение относительно
+    // вьюпорта, тогда как модальное окно сохраняет положение
+    // 4. Если фокус находится на селекте, то его никак не открыть по пробелу, плюс пробел вызывает скролл родительской страницы
+    // 5. Если дропдаун раскрыт, то при нажатии стрелки вверх/вниз события всплывают вверх по дому
+    // 6. Если раскоментировать инпут ниже, то тоже можно получить интересное поведение навигации по табу и шифт-табу
+
+    modalWithContent = {
+       'id': 'popup-content'
+       'theme': 'blank'
+       'titleContent': 'Modal with complex content'
+       'content': (
+            <div style="background-color: white; padding: 5px; margin: 5px; -webkit-transition: all 1s ease">
+                nb-select( {
+                    'size': 'm'
+                    'theme': 'pseudo'
+                    'maxHeight': 5
+                    'name': 'select'
+                    'items': [
+                        {
+                            'text': 'option1'
+                            'value': '1'
+                        }
+                        {
+                            'text': 'option2'
+                            'value': '2'
+                        }
+                    ]
+                })
+
+                nb-input({
+                    'size': 'm'
+                    'class': 'nb-input-with-focus'
+                    'name': 'answer'
+                    'hint': 'hint'
+                    'error': {
+                        'direction': 'right'
+                        'content': 'ERR'
+                    }
+                })
+
+                nb-select( {
+                    'size': 'm'
+                    'theme': 'pseudo'
+                    'maxHeight': 5
+                    'name': 'select2'
+                    'disabled': true()
+                    'items': [
+                        {
+                            'text': 'Отключенный селект ловит фокус при shft-tab'
+                            'value': '1'
+                        }
+                        {
+                            'text': 'option2'
+                            'value': '2'
+                        }
+                    ]
+                })
+
+                //nb-input({
+                //    'size': 'm'
+                //    'class': 'nb-input-with-focus2'
+                //    'name': 'answer2'
+                //    'hint': 'olo'
+                //    'error': {
+                //        'direction': 'right'
+                //        'content': 'err'
+                //    }
+                //})
+
+                nb-button({
+                    'size': 'm'
+                    'theme': 'action'
+                    'content': 'BUTTON'
+                })
+
+                nb-button({
+                    'size': 'm'
+                    'theme': 'action'
+                    'disabled': true()
+                    'content': 'DISABLED'
+                })
+            </div>
+        )
+       'data-nb': {
+            'width': '300px'
+       }
+       'close': {
+            'class': 'ns-action'
+            'attrs': {
+                'data-params': '123'
+            }
+       }
+    }
+
+
     modalBlank = {
        'id': 'popup5'
        'theme': 'blank'
@@ -203,5 +307,6 @@ func popups() {
 
         nb-popup-modal(modal)
         nb-popup-modal(modalBlank)
+        nb-popup-modal(modalWithContent)
     </div>
 }
